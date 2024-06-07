@@ -14,4 +14,4 @@ export default function updateStudentGradeByCity(students, city, grades) {
       }));
   }
   return [];
-} 
+}
