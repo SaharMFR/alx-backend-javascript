@@ -1,7 +1,5 @@
 const express = require('express');
 const countStudents = require('./3-read_file_async');
-const fs = require('fs');
-const path = require('path');
 
 const app = express();
 const port = 1245;
