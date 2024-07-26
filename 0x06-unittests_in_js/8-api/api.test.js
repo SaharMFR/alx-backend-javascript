@@ -1,37 +1,35 @@
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const app = require('./api');
-const { expect } = chai;
-const { before, after } = require('mocha');
+const request = require('request');
+const { expect } = require('chai');
+const app = require('./api'); // Import the app
+const port = 7865;
 
-chai.use(chaiHttp);
+describe('Index page', function() {
+  let server;
 
-let server;
-
-describe('Index page', () => {
-    before((done) => {
-        server = app.listen(7865, done);
+  before(function(done) {
+    server = app.listen(port, () => {
+      console.log(`API available on localhost port ${port}`);
+      done();
     });
+  });
 
-    after((done) => {
-        server.close(done);
-    });
+  after(function(done) {
+    server.close(done);
+  });
 
-    it('Correct status code?', (done) => {
-        chai.request(server)
-            .get('/')
-            .end((err, res) => {
-                expect(res).to.have.status(200);
-                done();
-            });
+  it('Correct status code?', function(done) {
+    request.get(`http://localhost:${port}`, (error, response, body) => {
+      if (error) return done(error);
+      expect(response.statusCode).to.equal(200);
+      done();
     });
+  });
 
-    it('Correct result?', (done) => {
-        chai.request(server)
-            .get('/')
-            .end((err, res) => {
-                expect(res.text).to.equal('Welcome to the payment system');
-                done();
-            });
+  it('Correct result?', function(done) {
+    request.get(`http://localhost:${port}`, (error, response, body) => {
+      if (error) return done(error);
+      expect(body).to.equal('Welcome to the payment system');
+      done();
     });
+  });
 });
